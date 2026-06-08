@@ -16,8 +16,6 @@ const Login = () => {
         navigate('/');
     }
 
-    console.log("Login page loading =", loading);
-
     if(loading) {
         return (<main><h1>Loading</h1></main>);
     }
