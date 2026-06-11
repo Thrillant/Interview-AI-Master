@@ -1,4 +1,4 @@
-// ─── Design Tokens (matching previous theme) ──────────────────────────────
+// ─── Design Tokens ───────────────────────────────────────────────────────────
 $bg-base:        #0f0f14;
 $bg-sidebar:     #0f0f14;
 $bg-card:        #16161f;
@@ -126,6 +126,7 @@ $font-sans:      'Inter', system-ui, -apple-system, sans-serif;
 
 .content-panel {
   max-width: 800px;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -169,13 +170,11 @@ $font-sans:      'Inter', system-ui, -apple-system, sans-serif;
     border-color: rgba(139, 92, 246, 0.4);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 
-    // Expands the grid track to its content height
     .q-card__body-wrapper {
       grid-template-rows: 1fr;
       opacity: 1;
     }
 
-    // Rotates the chevron to point upwards
     .q-card__icon svg {
       transform: rotate(180deg);
     }
@@ -226,7 +225,6 @@ $font-sans:      'Inter', system-ui, -apple-system, sans-serif;
     }
   }
 
-  // The magic wrapper that animates height using CSS Grid
   &__body-wrapper {
     display: grid;
     grid-template-rows: 0fr;
@@ -238,7 +236,7 @@ $font-sans:      'Inter', system-ui, -apple-system, sans-serif;
   }
 
   &__body {
-    min-height: 0; // Crucial requirement for the CSS grid trick to work
+    min-height: 0;
     padding: 0 1.25rem 1.25rem 4rem;
     display: flex;
     flex-direction: column;
@@ -277,7 +275,7 @@ $font-sans:      'Inter', system-ui, -apple-system, sans-serif;
 .q-list {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem; // <--- This adds space between the question cards
+  gap: 1.5rem;
 }
 
 // ─── Roadmap Timeline ───────────────────────────────────────────────────
@@ -285,17 +283,34 @@ $font-sans:      'Inter', system-ui, -apple-system, sans-serif;
   display: flex;
   flex-direction: column;
   padding-top: 1rem;
+  position: relative; 
+
+  // Single static gradient track spanning the entire list
+  &__track {
+    position: absolute;
+    top: 2rem;
+    bottom: 2rem;
+    left: 9px; 
+    width: 2px;
+    background: linear-gradient(180deg, rgba(232, 62, 140, 0.5) 0%, rgba(139, 92, 246, 0.5) 100%);
+    border-radius: 2px;
+    z-index: 1;
+  }
 }
 
 .timeline-item {
   display: flex;
   gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 2; 
 
   &__marker {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 20px;
+    flex-shrink: 0;
   }
 
   &__dot {
@@ -306,23 +321,16 @@ $font-sans:      'Inter', system-ui, -apple-system, sans-serif;
     border: 2px solid $text-muted;
     z-index: 2;
     transition: all 0.3s;
-  }
-
-  &__line {
-    flex: 1;
-    width: 2px;
-    background: $border-subtle;
-    margin-top: 4px;
-    margin-bottom: 4px;
+    margin-top: 4px; 
   }
 
   &__content {
+    min-width: 1rem;
     flex: 1;
     background: $bg-card;
     border: 1px solid $border-subtle;
     border-radius: $radius-md;
     padding: 1.25rem;
-    margin-bottom: 1.5rem;
   }
 
   &__header {
@@ -358,14 +366,6 @@ $font-sans:      'Inter', system-ui, -apple-system, sans-serif;
     font-weight: 600;
   }
 
-  &__status {
-    font-size: 0.75rem;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-  }
-
   &__tasks {
     list-style: disc;
     padding-left: 1.5rem;
@@ -379,31 +379,19 @@ $font-sans:      'Inter', system-ui, -apple-system, sans-serif;
     li::marker { color: $text-muted; }
   }
 
-  // Status variations
+  // Status variations (affecting the dot style and optional card border)
   &--completed {
     .timeline-item__dot {
       background: $accent-pink;
       border-color: $accent-pink;
-    }
-    .timeline-item__line {
-      background: rgba(232, 62, 140, 0.3);
-    }
-    .timeline-item__status {
-      color: $accent-green;
     }
   }
 
   &--in-progress {
     .timeline-item__dot {
       background: $accent-purple;
-      border-color: $accent-purple;
-      box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.2);
-    }
-    .timeline-item__status {
-      color: $accent-purple;
-      background: rgba(139, 92, 246, 0.1);
-      padding: 0.25rem 0.6rem;
-      border-radius: 99px;
+      border-color: rgba(139, 92, 246, 0.4); 
+      box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);
     }
     .timeline-item__content {
       border-color: rgba(139, 92, 246, 0.3);
@@ -411,9 +399,6 @@ $font-sans:      'Inter', system-ui, -apple-system, sans-serif;
   }
 
   &--pending {
-    .timeline-item__status {
-      color: $text-muted;
-    }
     .timeline-item__content {
       opacity: 0.7;
     }
@@ -542,59 +527,6 @@ $font-sans:      'Inter', system-ui, -apple-system, sans-serif;
   &--low {
     border-color: rgba(34, 197, 94, 0.3);
     .skill-chip__icon { color: $accent-green; }
-  }
-}
-
-// ─── Progress Widget (Sidebar Bottom) ───────────────────────────────────
-.progress-widget {
-  margin-top: auto;
-  background: $bg-card;
-  border: 1px solid $border-subtle;
-  border-radius: $radius-lg;
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 0.75rem;
-
-  &__title {
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: $text-muted;
-    letter-spacing: 0.05em;
-    align-self: flex-start;
-    margin-bottom: 0.5rem;
-  }
-
-  &__label {
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: $text-primary;
-    margin-top: 0.5rem;
-  }
-
-  &__bar-bg {
-    width: 100%;
-    height: 6px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 99px;
-    overflow: hidden;
-  }
-
-  &__bar-fill {
-    height: 100%;
-    background: $accent-pink;
-    border-radius: 99px;
-  }
-
-  &__fraction {
-    font-size: 0.75rem;
-    color: $text-secondary;
-  }
-
-  .circular-progress__value {
-    font-size: 1.5rem;
   }
 }
 

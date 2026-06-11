@@ -85,6 +85,10 @@ async function generateInterviewReport({ resume, selfDescription, jobDescription
 
         Carefully compare the resume against the job description.
         Be realistic and objective while assigning the match score.
+        Generate at least 20 technical and 10 behavioral interview questions based on the job description, candidate's background, and industry standards.
+        For each question, provide the intention behind asking it and a sample answer that a strong candidate might give.
+        Identify skill gaps and categorize them as low, medium, or high severity based on how critical they are for the role.
+        Create a 14-day preparation plan with specific daily focus areas and tasks to help the candidate improve their chances of success in the interview.
     `;
 
     const response = await ai.models.generateContent({

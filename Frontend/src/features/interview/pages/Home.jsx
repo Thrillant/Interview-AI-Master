@@ -1,5 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router';
 import '../style/home.scss';
+import { useInterview } from '../hooks/useInterview.js';
 
 // ─── Icons (inline SVGs to keep UI layer self-contained) ────────────────────
 
@@ -59,6 +61,16 @@ const LightbulbIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
     strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M9 21h6m-6-3h6m-3-15a6 6 0 0 1 6 6c0 2.2-1.2 4.1-3 5.2V15H9v-1.8C7.2 12.1 6 10.2 6 8a6 6 0 0 1 6-6z" />
+  </svg>
+);
+
+const FileIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+    <polyline points="14 2 14 8 20 8"></polyline>
+    <line x1="16" y1="13" x2="8" y2="13"></line>
+    <line x1="16" y1="17" x2="8" y2="17"></line>
+    <polyline points="10 9 9 9 8 9"></polyline>
   </svg>
 );
 
@@ -158,6 +170,31 @@ const Home = () => {
   const [jobDescription, setJobDescription] = useState('');
   const [selfDescription, setSelfDescription] = useState('');
   const [resumeFile, setResumeFile] = useState(null);
+  const {loading, generateReport, reports, getAllReports} = useInterview();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (getAllReports) {
+      getAllReports(); 
+    }
+  }, []);
+
+  const handleGenerateReport = async () => {
+    if (!resumeFile && !selfDescription.trim()) {
+      alert("Please provide either a resume or a self-description to generate the interview strategy.");
+      return;
+    }
+    const data = await generateReport({resume: resumeFile, selfDescription, jobDescription});
+    navigate(`/interview/${data._id}`);
+  }
+
+  if(loading){
+    return (
+      <main>
+        <h1>Generating your personalized interview strategy...</h1>
+      </main>
+    )
+  }
 
   const JD_MAX = 5000;
   const SD_MAX = 1000;
@@ -267,11 +304,43 @@ const Home = () => {
             step-by-step interview strategy tailored to your success.
           </p>
         </div>
-        <button type="button" className="cta-bar__button">
+        <button
+         type="button" className="cta-bar__button" onClick={handleGenerateReport}>
           <SparkleIcon />
           Generate My Interview Strategy
         </button>
       </div>
+
+      {/* ── Recent Reports History ─────────────────────────────────────── */}
+      {reports && reports.length > 0 && (
+        <section className="home__history">
+          <div className="history-header">
+            <h2 className="history-header__title">Recent Interview Plans</h2>
+          </div>
+          <div className="history-grid">
+            {reports.map((report) => (
+              <div 
+                key={report._id} 
+                className="history-card" 
+                onClick={() => navigate(`/interview/${report._id}`)}
+              >
+                <div className="history-card__icon">
+                  <FileIcon />
+                </div>
+                <div className="history-card__content">
+                  <h3 className="history-card__title">{report.title || 'Strategy Report'}</h3>
+                  <span className="history-card__date">
+                    {report.createdAt ? new Date(report.createdAt).toLocaleDateString() : 'Recent'}
+                  </span>
+                </div>
+                <div className="history-card__score">
+                  <span>{report.matchScore ? `${report.matchScore}% Match` : 'Ready'}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* ── Footer badges ─────────────────────────────────────────────── */}
       <div className="home__footer-badges">

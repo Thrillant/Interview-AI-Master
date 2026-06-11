@@ -13,6 +13,7 @@ $bg-footer-badge: #16161f;
 
 $accent-pink:    #e83e8c;
 $accent-purple:  #a855f7;
+$accent-green:   #22c55e;
 $accent-gradient: linear-gradient(135deg, #e83e8c 0%, #a855f7 100%);
 $accent-btn-gradient: linear-gradient(135deg, #d946a8 0%, #9333ea 100%);
 
@@ -518,6 +519,90 @@ $font-sans:      'Inter', system-ui, -apple-system, sans-serif;
     }
 
     &:active { transform: translateY(0); }
+  }
+}
+
+// ─── History Section ─────────────────────────────────────────────────────────
+.home__history {
+  width: 100%;
+  max-width: 1060px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.history-header {
+  display: flex;
+  align-items: center;
+
+  &__title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: $text-primary;
+  }
+}
+
+.history-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.history-card {
+  background-color: $bg-card;
+  border: 1px solid $border-subtle;
+  border-radius: $radius-lg;
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s, transform 0.2s;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+    border-color: rgba(168, 85, 247, 0.4);
+    transform: translateY(-2px);
+  }
+
+  &__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: $radius-sm;
+    background: rgba(168, 85, 247, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $accent-purple;
+    flex-shrink: 0;
+  }
+
+  &__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  &__title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: $text-primary;
+  }
+
+  &__date {
+    font-size: 0.75rem;
+    color: $text-secondary;
+  }
+
+  &__score {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: $accent-green;
+    background: rgba(34, 197, 94, 0.1);
+    padding: 0.25rem 0.6rem;
+    border-radius: 99px;
+    white-space: nowrap;
   }
 }
 
