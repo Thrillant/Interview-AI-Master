@@ -157,6 +157,7 @@ async function generateResumePdf({resume, selfDescription, jobDescription, aiMod
         2. EXACT CONTACT INFO: Extract the real email, phone number, LinkedIn, and GitHub links exactly as they appear in the input text. Do not invent or fabricate links.
         3. If a piece of contact info is missing from the input, do not make one up. Just leave it out entirely.
         4. Don't add white spaces after the resume content ends.
+        5. NO JAVASCRIPT: Do NOT include any <script> tags, React code, or JavaScript in the HTML. Output pure, static HTML and inline CSS only.
 
         CONTENT STRATEGY (Tailoring):
         1. Analyze the Job Description to identify key technical skills, soft skills, and core responsibilities.
