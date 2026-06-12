@@ -7,14 +7,12 @@ import { useInterview } from '../hooks/useInterview.js';
 
 const SparkleIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-    <path d="M12 2L13.5 9.5L21 11L13.5 12.5L12 20L10.5 12.5L3 11L10.5 9.5L12 2Z"
-      fill="currentColor" />
+    <path d="M12 2L13.5 9.5L21 11L13.5 12.5L12 20L10.5 12.5L3 11L10.5 9.5L12 2Z" fill="currentColor" />
   </svg>
 );
 
 const UploadIcon = () => (
-  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-    strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
     <polyline points="16 16 12 12 8 16" />
     <line x1="12" y1="12" x2="12" y2="21" />
     <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" />
@@ -28,23 +26,20 @@ const BrainIcon = () => (
 );
 
 const TargetIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="6" />
     <circle cx="12" cy="12" r="2" />
   </svg>
 );
 
 const ShieldIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
   </svg>
 );
 
 const ClockIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
   </svg>
 );
@@ -52,14 +47,12 @@ const ClockIcon = () => (
 const InfoIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
     <circle cx="12" cy="12" r="10" opacity="0.2" />
-    <path d="M12 8v4m0 4h.01M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"
-      stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" />
+    <path d="M12 8v4m0 4h.01M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" />
   </svg>
 );
 
 const LightbulbIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M9 21h6m-6-3h6m-3-15a6 6 0 0 1 6 6c0 2.2-1.2 4.1-3 5.2V15H9v-1.8C7.2 12.1 6 10.2 6 8a6 6 0 0 1 6-6z" />
   </svg>
 );
@@ -74,7 +67,22 @@ const FileIcon = () => (
   </svg>
 );
 
-// ─── Sub-components (UI layer building blocks) ───────────────────────────────
+const CpuIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+    <rect x="9" y="9" width="6" height="6"></rect>
+    <line x1="9" y1="1" x2="9" y2="4"></line>
+    <line x1="15" y1="1" x2="15" y2="4"></line>
+    <line x1="9" y1="20" x2="9" y2="23"></line>
+    <line x1="15" y1="20" x2="15" y2="23"></line>
+    <line x1="20" y1="9" x2="23" y2="9"></line>
+    <line x1="20" y1="14" x2="23" y2="14"></line>
+    <line x1="1" y1="9" x2="4" y2="9"></line>
+    <line x1="1" y1="14" x2="4" y2="14"></line>
+  </svg>
+);
+
+// ─── Sub-components ───────────────────────────────
 
 const FeatureBadge = ({ icon, title, subtitle }) => (
   <div className="feature-badge">
@@ -163,14 +171,18 @@ const FooterLink = ({ label }) => (
   <a href="#" className="footer-link">{label}</a>
 );
 
-// ─── Home Page (UI Layer) ─────────────────────────────────────────────────────
+// ─── Home Page ─────────────────────────────────────────────────────
 
 const Home = () => {
-  // Local UI state lives here until the hook layer is wired up
   const [jobDescription, setJobDescription] = useState('');
   const [selfDescription, setSelfDescription] = useState('');
   const [resumeFile, setResumeFile] = useState(null);
-  const {loading, generateReport, reports, getAllReports} = useInterview();
+  
+  // Local state for the UI dropdown
+  const [localSelectedModel, setLocalSelectedModel] = useState('gemini-3.5-flash'); 
+  
+  // Extract setSelectedModel from the hook to update the global context
+  const { loading, generateReport, reports, getAllReports, setSelectedModel } = useInterview();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -184,11 +196,26 @@ const Home = () => {
       alert("Please provide either a resume or a self-description to generate the interview strategy.");
       return;
     }
-    const data = await generateReport({resume: resumeFile, selfDescription, jobDescription});
-    navigate(`/interview/${data._id}`);
+
+    // 1. Save the choice to the global context so Interview.jsx can use it later
+    if (setSelectedModel) {
+      setSelectedModel(localSelectedModel);
+    }
+    
+    // 2. Pass the selected model along with other form data to the backend
+    const data = await generateReport({
+        resume: resumeFile, 
+        selfDescription, 
+        jobDescription,
+        aiModel: localSelectedModel 
+    });
+    
+    if (data && data._id) {
+      navigate(`/interview/${data._id}`);
+    }
   }
 
-  if(loading){
+  if (loading) {
     return (
       <main>
         <h1>Generating your personalized interview strategy...</h1>
@@ -290,8 +317,24 @@ const Home = () => {
               <CharCount current={selfDescription.length} max={SD_MAX} />
             </div>
           </div>
+          
+          {/* AI Model Selection */}
+          <div className="profile-section" style={{ marginTop: 'auto', paddingTop: '1rem' }}>
+            <p className="profile-section__label">
+              <CpuIcon /> AI Engine <span className="profile-section__tag profile-section__tag--muted">Configuration</span>
+            </p>
+            <select 
+              className="home__select" 
+              value={localSelectedModel} 
+              onChange={(e) => setLocalSelectedModel(e.target.value)}
+            >
+              <option value="gemini-3.5-flash">Gemini 3.5 Flash</option>
+              <option value="gemini-3.1-flash-lite">Gemini 3.1 Flash-Lite</option>
+              <option value="gemini-3-flash-preview">Gemini 3.0 Flash Preview</option>
+              <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+            </select>
+          </div>
 
-          <InfoNote message="Either a Resume or a Self Description is required to generate a personalized plan." />
         </div>
       </section>
 
@@ -318,7 +361,7 @@ const Home = () => {
             <h2 className="history-header__title">Recent Interview Plans</h2>
           </div>
           <div className="history-grid">
-            {reports.map((report) => (
+            {reports.slice(0, 12).map((report) => (
               <div 
                 key={report._id} 
                 className="history-card" 

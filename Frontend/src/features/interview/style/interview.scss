@@ -48,10 +48,16 @@ $font-sans:      'Inter', system-ui, -apple-system, sans-serif;
   gap: 1.5rem;
   flex-shrink: 0;
 
+  position: sticky;
+  top: 0;
+  height: 100vh;
+
   @media (max-width: 1024px) {
     width: 100%;
     border-right: none;
     border-bottom: 1px solid $border-subtle;
+    position: relative;
+    height: auto;
   }
 
   &__title {
@@ -112,6 +118,63 @@ $font-sans:      'Inter', system-ui, -apple-system, sans-serif;
   }
 }
 
+// ─── Resume Widget (Sidebar Bottom) ───────────────────────────────────
+.resume-widget {
+  margin-top: auto; 
+  background: linear-gradient(145deg, rgba(139, 92, 246, 0.05) 0%, rgba(139, 92, 246, 0.12) 100%);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: $radius-lg;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__icon {
+    color: $accent-purple;
+    display: flex;
+  }
+
+  &__title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: $text-primary;
+  }
+
+  &__text {
+    font-size: 0.75rem;
+    color: $text-secondary;
+    line-height: 1.5;
+  }
+
+  &__btn {
+    margin-top: 0.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.6rem;
+    background: rgba(139, 92, 246, 0.15);
+    color: #c4b5fd;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: $radius-sm;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background: rgba(139, 92, 246, 0.25);
+      color: #fff;
+    }
+  }
+}
+
 // ─── Main Area ──────────────────────────────────────────────────────────
 .main-area {
   flex: 1;
@@ -125,8 +188,8 @@ $font-sans:      'Inter', system-ui, -apple-system, sans-serif;
 }
 
 .content-panel {
-  max-width: 800px;
-  width: 100%;
+  max-width: 1000px; 
+  width: 100%;       
   margin: 0 auto;
 }
 
@@ -156,6 +219,72 @@ $font-sans:      'Inter', system-ui, -apple-system, sans-serif;
   color: $text-secondary;
   font-size: 0.9rem;
   margin-bottom: 2rem;
+}
+
+// ─── Resume Preview Tab ───────────────────────────────────────────────
+.download-resume-btn {
+  margin-left: auto; // Pushes the button to the far right of the flex container
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  background: linear-gradient(135deg, #a855f7 0%, #8b5cf6 100%);
+  color: #fff;
+  border: none;
+  border-radius: $radius-sm;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+
+  &:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.resume-preview-container {
+  background: #1e1e2d; 
+  border-radius: $radius-md;
+  padding: 2.5rem;
+  min-height: 500px;
+  overflow-x: auto; 
+  display: flex;
+  justify-content: center;
+  box-shadow: inset 0 2px 15px rgba(0,0,0,0.2);
+}
+
+.resume-document {
+  background: #ffffff;
+  width: 100%;
+  max-width: 210mm; 
+  min-height: 297mm; 
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  color: #333; 
+
+  * { box-sizing: border-box; }
+}
+
+.resume-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 2rem;
+  color: $text-muted;
+  height: 100%;
+  width: 100%;
+  
+  svg {
+    width: 48px;
+    height: 48px;
+    opacity: 0.5;
+  }
 }
 
 // ─── Question Accordion ─────────────────────────────────────────────────
@@ -285,7 +414,6 @@ $font-sans:      'Inter', system-ui, -apple-system, sans-serif;
   padding-top: 1rem;
   position: relative; 
 
-  // Single static gradient track spanning the entire list
   &__track {
     position: absolute;
     top: 2rem;
@@ -379,7 +507,6 @@ $font-sans:      'Inter', system-ui, -apple-system, sans-serif;
     li::marker { color: $text-muted; }
   }
 
-  // Status variations (affecting the dot style and optional card border)
   &--completed {
     .timeline-item__dot {
       background: $accent-pink;
@@ -414,9 +541,15 @@ $font-sans:      'Inter', system-ui, -apple-system, sans-serif;
   gap: 2rem;
   flex-shrink: 0;
 
+  position: sticky;
+  top: 0;
+  height: 100vh;
+
   @media (max-width: 1024px) {
     width: 100%;
     padding: 1.5rem;
+    position: relative;
+    height: auto;
   }
 }
 

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { InterviewContext } from '../interview.context';
 
 const api = axios.create({
   baseURL: "http://localhost:3000",
@@ -8,17 +9,16 @@ const api = axios.create({
 /**
  * @description Service to generate interview report based on user self description, resume and job description.
  */
-export const generateInterviewReport = async ({resume, selfDescription, jobDescription}) => {
+export const generateInterviewReport = async ({resume, selfDescription, jobDescription, aiModel}) => {
     const formData = new FormData();
-    formData.append("resume", new Blob([resume], { type: "application/pdf" }), "resume.pdf");
-    formData.append("selfDescription", selfDescription);
-    formData.append("jobDescription", jobDescription);
+    if(resume){
+        formData.append("resume", resume);
+    }
+    formData.append("selfDescription", selfDescription || "");
+    formData.append("jobDescription", jobDescription || "");
+    formData.append("aiModel", aiModel || "gemini-3.1-flash-lite");
 
-    const response = await api.post("/api/interview/", formData, {
-        headers: {
-            "Content-Type": "multipart/form-data"
-        }
-    });
+    const response = await api.post("/api/interview/", formData);
 
     return response.data;
 }
@@ -36,5 +36,16 @@ export const getInterviewReportById = async (interviewId) => {
  */
 export const getAllInterviewReports = async () => {
     const response = await api.get("/api/interview/");
+    return response.data;
+}
+
+/**
+ * @description Service to generate a resume based on users input
+ */
+export const generateResumePdf = async(interviewId, aiModel) => {
+    const response = await api.post(`/api/interview/resume/pdf/${interviewId}?aiModel=${aiModel || 'gemini-3.1-flash-lite'}`, null, {
+        responseType: "blob"
+    });
+
     return response.data;
 }

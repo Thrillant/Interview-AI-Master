@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import "../style/interview.scss";
 import { useInterview } from '../hooks/useInterview.js';
 import { useParams } from 'react-router';
+import { generateResumePdf } from '../services/interview.api.js';
 
 // --- Icons ---
 const TechIcon = () => (
@@ -26,6 +27,31 @@ const CheckIcon = () => (
 
 const DatabaseIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+);
+
+const FileTextIcon = () => (
+  <svg gap="1rem" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+    <polyline points="14 2 14 8 20 8"></polyline>
+    <line x1="16" y1="13" x2="8" y2="13"></line>
+    <line x1="16" y1="17" x2="8" y2="17"></line>
+    <polyline points="10 9 9 9 8 9"></polyline>
+  </svg>
+);
+
+const EyeIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+    <circle cx="12" cy="12" r="3"></circle>
+  </svg>
+);
+
+const DownloadIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+    <polyline points="7 10 12 15 17 10"></polyline>
+    <line x1="12" y1="15" x2="12" y2="3"></line>
+  </svg>
 );
 
 // --- Subcomponents ---
@@ -87,10 +113,17 @@ const Interview = () => {
   const [openTechQs, setOpenTechQs] = useState({ 0: true });
   const [openBehavioralQs, setOpenBehavioralQs] = useState({ 0: true });
 
-  const { interviewId } = useParams();
-  const { report, loading, getReportById } = useInterview();
+  const [pdfUrl, setPdfUrl] = useState(null);
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
 
-  
+  const { interviewId } = useParams();
+  const { report, loading, getReportById, getResumePdf, selectedModel } = useInterview();
+
+  useEffect(() => {
+    if (interviewId) {
+      getReportById(interviewId);
+    }
+  }, [interviewId]);
 
   if(loading || !report) {
     return <div className="loading">Loading...</div>;
@@ -104,7 +137,82 @@ const Interview = () => {
     setOpenBehavioralQs(prev => ({ ...prev, [index]: !prev[index] }));
   };
 
+  const handleGeneratePdf = async () => {
+    setIsGeneratingPdf(true);
+    const url = await getResumePdf(interviewId, selectedModel);
+    if (url) setPdfUrl(url);
+    setIsGeneratingPdf(false);
+  };
+
+  const handleViewResume = async () => {
+    setActiveTab('resume');
+    if (!pdfUrl) {
+      setIsGeneratingPdf(true);
+      const url = await getResumePdf(interviewId, selectedModel);
+      if (url) setPdfUrl(url);
+      setIsGeneratingPdf(false);
+    }
+  };
+
   const renderContent = () => {
+    if (activeTab === 'resume') {
+      return (
+        <div className="content-panel">
+          <div className="content-header">
+            <h2>Tailored Resume</h2>
+            <span className="count-badge">ATS-Optimized</span>
+            
+            <div style={{ marginLeft: 'auto', display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+
+              <button 
+                className="download-resume-btn" 
+                onClick={handleGeneratePdf}
+                disabled={isGeneratingPdf}
+                style={{ background: 'rgba(139, 92, 246, 0.15)', color: '#c4b5fd', border: '1px solid rgba(139, 92, 246, 0.3)' }}
+              >
+                {isGeneratingPdf ? "Wait..." : pdfUrl ? "Regenerate" : "Generate"}
+              </button>
+
+              {pdfUrl && (
+                <a 
+                  href={pdfUrl} 
+                  download={`Tailored_Resume_${interviewId}.pdf`}
+                  className="download-resume-btn"
+                  style={{ textDecoration: 'none' }}
+                >
+                  <DownloadIcon /> Download PDF
+                </a>
+              )}
+            </div>
+          </div>
+          <p className="content-subtitle">Your dynamically generated resume tailored to the job description.</p>
+          
+          <div className="resume-preview-container" style={{ padding: 0 }}>
+            {isGeneratingPdf ? (
+              <div className="resume-placeholder">
+                <FileTextIcon />
+                <p>Generating your tailored PDF resume... This usually takes 10-15 seconds.</p>
+              </div>
+            ) : pdfUrl ? (
+              <iframe 
+                src={`${pdfUrl}#toolbar=0&navpanes=0&scrollbar=0`} 
+                width="100%" 
+                height="700px" 
+                style={{ border: 'none', borderRadius: '10px' }} 
+                title="Resume PDF Preview" 
+              />
+            ) : (
+              <div className="resume-placeholder">
+                <FileTextIcon />
+                <p>Failed to generate resume preview. Please try again.</p>
+                <button onClick={handleViewResume} className="download-resume-btn" style={{ marginTop: '1rem' }}>Retry</button>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }
+
     if (activeTab === 'technical') {
       return (
         <div className="content-panel">
@@ -202,7 +310,7 @@ const Interview = () => {
   return (
     <div className="interview-dashboard">
       
-      {/* --- Sidebar (Navigation Only) --- */}
+      {/* --- Sidebar --- */}
       <aside className="sidebar">
         <h4 className="sidebar__title">SECTIONS</h4>
         <nav className="sidebar__nav">
@@ -225,6 +333,23 @@ const Interview = () => {
             <RoadMapIcon /> Road Map
           </button>
         </nav>
+
+        {/* --- Generated Resume Widget (Bottom Left) --- */}
+        <div className="resume-widget">
+          <div className="resume-widget__header">
+            <div className="resume-widget__icon">
+              <FileTextIcon />
+            </div>
+            <h5 className="resume-widget__title">Tailored Resume</h5>
+          </div>
+          <p className="resume-widget__text">ATS-optimized resume generated for this specific role.</p>
+          <button 
+            className="resume-widget__btn" 
+            onClick={handleViewResume}
+          >
+            <EyeIcon /> View Resume
+          </button>
+        </div>
       </aside>
 
       {/* --- Main Content --- */}

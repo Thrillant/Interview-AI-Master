@@ -1,5 +1,5 @@
 const pdfParse = require("pdf-parse");
-const generateInterviewReport = require("../services/ai.service");
+const {generateInterviewReport, generateResumePdf} = require("../services/ai.service");
 const interviewReportModel = require("../models/interviewReport.model");
 
 /**
@@ -7,19 +7,28 @@ const interviewReportModel = require("../models/interviewReport.model");
  */
 async function generateInterviewReportController(req, res){
 
-    const resumeContent = await (new pdfParse.PDFParse(Uint8Array.from(req.file.buffer))).getText();
-    const {selfDescription, jobDescription} = req.body;
+    let resumeText = "";
+    if (req.file && req.file.buffer) {
+        try {
+            const pdfData = await pdfParse(req.file.buffer);
+            resumeText = pdfData.text;
+        } catch (error) {
+            console.error("Failed to parse PDF, proceeding without resume text:", error.message);
+        }
+    }
+    const {selfDescription, jobDescription, aiModel} = req.body;
 
     const interviewReportByAi = await generateInterviewReport({
-        resume: resumeContent.text,
+        resume: resumeText,
         selfDescription,
-        jobDescription
+        jobDescription,
+        aiModel
     })
 
 
     const interviewReport = await interviewReportModel.create({
         user: req.user.id,
-        resume: resumeContent.text,
+        resume: resumeText,
         selfDescription,
         jobDescription,
         ...interviewReportByAi
@@ -61,4 +70,31 @@ async function getAllInterviewReportsController(req, res){
     });
 }
 
-module.exports = { generateInterviewReportController, getInterviewReportByIdController, getAllInterviewReportsController }
+/**
+ * @description Controller to generate interview report based on user self description, resume and job description.
+ */
+async function generateResumePdfController(req, res){
+    const {interviewId} = req.params;
+    const aiModel = req.query.aiModel || "gemini-3.1-flash-lite";
+    const interviewReport = await interviewReportModel.findById(interviewId);
+
+    if(!interviewReport) {
+        return res.status(404).json({
+            message: "Interview Report not found."
+        })
+    }
+
+    const {resume, jobDescription, selfDescription} = interviewReport;
+
+    const pdfBuffer = await generateResumePdf({resume, jobDescription, selfDescription, aiModel});
+    res.set({
+        "content-type": "application/pdf",
+        "content-Disposition": `attachment; filename=resume_${interviewId}.pdf`
+    })
+
+    res.send(pdfBuffer);
+}
+
+module.exports = { generateInterviewReportController, getInterviewReportByIdController, getAllInterviewReportsController,
+generateResumePdfController
+}
