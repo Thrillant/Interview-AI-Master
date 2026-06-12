@@ -217,10 +217,18 @@ const Home = () => {
 
   if (loading) {
     return (
-      <main>
-        <h1>Generating your personalized interview strategy...</h1>
+      <main className="home" style={{ justifyContent: 'center' }}>
+        <div className="home__card" style={{ maxWidth: '400px', padding: '3rem 2rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', border: '1px solid rgba(168, 85, 247, 0.3)' }}>
+          <div style={{ width: '50px', height: '50px', borderRadius: '12px', background: 'rgba(168, 85, 247, 0.15)', color: '#a855f7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <SparkleIcon />
+          </div>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#f0f0f6' }}>Analyzing Profile...</h2>
+          <p style={{ fontSize: '0.85rem', color: '#8888a8', lineHeight: '1.5' }}>
+            Please wait while our AI builds your custom interview strategy. This usually takes 15-30 seconds.
+          </p>
+        </div>
       </main>
-    )
+    );
   }
 
   const JD_MAX = 5000;
