@@ -14,10 +14,10 @@ async function generateInterviewReportController(req, res){
             message: "CRITICAL ERROR: No resume file detected."
         });
     }
-    
+
     if (req.file && req.file.buffer) {
         try {
-            const pdfData = await pdfParse(req.file.buffer);
+            const pdfData = await (new pdfParse.PDFParse(Uint8Array.from(req.file.buffer))).getText();
             resumeText = pdfData.text;
         } catch (error) {
             console.error("Failed to parse PDF, proceeding without resume text:", error.message);
