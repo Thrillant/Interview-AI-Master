@@ -148,7 +148,7 @@ const DropZone = ({ onFileSelect, fileName }) => {
         ref={inputRef}
         type="file"
         hidden
-        accept=".pdf,.docx"
+        accept=".pdf"
         onChange={(e) => onFileSelect?.(e.target.files[0])}
       />
       <div className="drop-zone__icon"><UploadIcon /></div>
@@ -160,7 +160,7 @@ const DropZone = ({ onFileSelect, fileName }) => {
             <button type="button" className="drop-zone__btn" onClick={(e) => { e.stopPropagation(); inputRef.current?.click(); }}>
               Choose File
             </button>
-            <p className="drop-zone__hint">PDF or DOCX (Max 5MB)</p>
+            <p className="drop-zone__hint">PDF (Max 3MB)</p>
           </>
       }
     </div>

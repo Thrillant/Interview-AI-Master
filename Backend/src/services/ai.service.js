@@ -201,7 +201,7 @@ async function generateResumePdf({resume, selfDescription, jobDescription, aiMod
 
     const cleanJson = response.text.replace(/```json/gi, '').replace(/```/g, '').trim();
 
-    const jsonResponse = JSON.parse(response.text);
+    const jsonResponse = JSON.parse(cleanJson);
     const htmlContent = jsonResponse.resumePdf;
     const pdf = await convertHtmlToPdf(htmlContent);
     return pdf;

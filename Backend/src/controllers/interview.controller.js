@@ -8,6 +8,13 @@ const interviewReportModel = require("../models/interviewReport.model");
 async function generateInterviewReportController(req, res){
 
     let resumeText = "";
+
+    if (!req.file || !req.file.buffer) {
+        return res.status(400).json({
+            message: "CRITICAL ERROR: No resume file detected."
+        });
+    }
+    
     if (req.file && req.file.buffer) {
         try {
             const pdfData = await pdfParse(req.file.buffer);
