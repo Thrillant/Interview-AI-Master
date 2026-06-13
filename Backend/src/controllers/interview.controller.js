@@ -74,25 +74,32 @@ async function getAllInterviewReportsController(req, res){
  * @description Controller to generate interview report based on user self description, resume and job description.
  */
 async function generateResumePdfController(req, res){
-    const {interviewId} = req.params;
-    const aiModel = req.query.aiModel || "gemini-3.1-flash-lite";
-    const interviewReport = await interviewReportModel.findById(interviewId);
+    try {
+        const {interviewId} = req.params;
+        const aiModel = req.query.aiModel || "gemini-3.1-flash-lite";
+        const interviewReport = await interviewReportModel.findById(interviewId);
 
-    if(!interviewReport) {
-        return res.status(404).json({
-            message: "Interview Report not found."
-        })
+        if(!interviewReport) {
+            return res.status(404).json({
+                message: "Interview Report not found."
+            })
+        }
+
+        const {resume, jobDescription, selfDescription} = interviewReport;
+
+        const pdfBuffer = await generateResumePdf({resume, jobDescription, selfDescription, aiModel});
+        
+        res.set({
+            "content-type": "application/pdf",
+            "content-Disposition": `attachment; filename=resume_${interviewId}.pdf`
+        });
+
+        res.send(pdfBuffer);
+        
+    } catch (error) {
+        console.error("Fatal Error generating PDF:", error);
+        res.status(500).json({ message: "Failed to generate PDF.", error: error.message });
     }
-
-    const {resume, jobDescription, selfDescription} = interviewReport;
-
-    const pdfBuffer = await generateResumePdf({resume, jobDescription, selfDescription, aiModel});
-    res.set({
-        "content-type": "application/pdf",
-        "content-Disposition": `attachment; filename=resume_${interviewId}.pdf`
-    })
-
-    res.send(pdfBuffer);
 }
 
 module.exports = { generateInterviewReportController, getInterviewReportByIdController, getAllInterviewReportsController,

@@ -110,25 +110,31 @@ async function convertHtmlToPdf(htmlContent) {
         args: [
             '--no-sandbox', 
             '--disable-setuid-sandbox', 
-            '--disable-dev-shm-usage'
+            '--disable-dev-shm-usage',
+            '--single-process'
         ]
     });
-    const page = await browser.newPage();
-    await page.setContent(htmlContent, { 
-        waitUntil: 'networkidle2', 
-        timeout: 60000 
-    });
-    const pdf = await page.pdf({
-        format: "A4", margin: {
-            top: "15mm",
-            bottom: "15mm",
-            left: "10mm",
-            right: "10mm"
-        }
-    })
-
-    await browser.close();
-    return pdf;
+    try{
+        const page = await browser.newPage();
+        await page.setContent(htmlContent, { 
+            waitUntil: 'domcontentloaded', 
+            timeout: 45000 
+        });
+        const pdf = await page.pdf({
+            format: "A4", margin: {
+                top: "15mm",
+                bottom: "15mm",
+                left: "10mm",
+                right: "10mm"
+            }
+        });
+        return pdf;
+    } catch(error) {
+        console.error("Puppeteer crashed during PDF generation:", error);
+        throw error;
+    } finally {
+        if (browser) await browser.close();
+    }
 }
 
 async function generateResumePdf({resume, selfDescription, jobDescription, aiModel}) {
@@ -192,6 +198,8 @@ async function generateResumePdf({resume, selfDescription, jobDescription, aiMod
             responseSchema: resumePdfSchema
         }
     });
+
+    const cleanJson = response.text.replace(/```json/gi, '').replace(/```/g, '').trim();
 
     const jsonResponse = JSON.parse(response.text);
     const htmlContent = jsonResponse.resumePdf;
