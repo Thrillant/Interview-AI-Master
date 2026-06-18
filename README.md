@@ -35,7 +35,7 @@
 
 ## 🚀 Live Demo
 
-* **Link:** [Interview AI Master](https://www.google.com/search?q=https://interview-ai-master.vercel.app)
+* **Link:** [Interview AI Master](https://interview-ai-master.vercel.app)
 
 ---
 
