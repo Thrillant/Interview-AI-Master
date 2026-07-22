@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router";
 import "../auth.form.scss";
 import { useAuth } from "../hooks/useAuth.js";
+import Loader from "../../../Loader.jsx";
 
 // Theme Icon
 const SparkleIcon = () => (
@@ -25,13 +26,7 @@ const Register = () => {
     }
 
     if (loading) {
-        return (
-            <main className="auth-page">
-                <div className="auth-card" style={{ textAlign: 'center' }}>
-                    <h2 className="auth-header__title">Loading...</h2>
-                </div>
-            </main>
-        );
+        return <Loader />;
     }
 
     return (

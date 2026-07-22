@@ -3,6 +3,7 @@ import "../style/interview.scss";
 import { useInterview } from '../hooks/useInterview.js';
 import { useParams } from 'react-router';
 import { generateResumePdf } from '../services/interview.api.js';
+import Loader from '../../../Loader.jsx';
 
 // --- Icons ---
 const TechIcon = () => (
@@ -126,7 +127,7 @@ const Interview = () => {
   }, [interviewId]);
 
   if(loading || !report) {
-    return <div className="loading">Loading...</div>;
+    return <Loader />;
   }
 
   const toggleTechQ = (index) => {
