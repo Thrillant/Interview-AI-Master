@@ -58,15 +58,12 @@ export const useInterview = () => {
     }
 
     const getAllReports = async () => {
-        setLoading(true);
         let response = null;
         try {
             response = await getAllInterviewReports();
             setReports(response.interviewReports);
         } catch (error) {
             console.error("Error fetching interview reports:", error);
-        } finally {
-            setLoading(false);
         }
         return response?.interviewReports;
     };
