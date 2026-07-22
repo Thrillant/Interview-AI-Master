@@ -155,6 +155,21 @@ const Interview = () => {
     }
   };
 
+  const matchScore = report?.matchScore || 0;
+  let matchText = "Weak match for this role";
+  let matchColorClass = "widget-subtitle--red";
+  let matchCircleColor = "#ef4444";
+
+  if (matchScore >= 75) {
+    matchText = "Strong match for this role";
+    matchColorClass = "widget-subtitle--green";
+    matchCircleColor = "#22c55e";
+  } else if (matchScore >= 50) {
+    matchText = "Medium match for this role";
+    matchColorClass = "widget-subtitle--orange";
+    matchCircleColor = "#f59e0b";
+  }
+
   const renderContent = () => {
     if (activeTab === 'resume') {
       return (
@@ -362,8 +377,8 @@ const Interview = () => {
       <aside className="right-panel">
         <div className="widget-box widget-box--center">
           <h4 className="widget-title">MATCH SCORE</h4>
-          <CircularProgress value={report?.matchScore || 0} />
-          <p className="widget-subtitle widget-subtitle--green">Strong match for this role</p>
+          <CircularProgress value={matchScore} color={matchCircleColor} />
+          <p className={`widget-subtitle ${matchColorClass}`}>{matchText}</p>
         </div>
 
         <div className="widget-divider"></div>

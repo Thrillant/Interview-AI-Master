@@ -579,6 +579,12 @@ $font-sans:      'Inter', system-ui, -apple-system, sans-serif;
   &--green {
     color: $accent-green;
   }
+  &--orange {
+    color: $accent-orange;
+  }
+  &--red {
+    color: $accent-red;
+  }
 }
 
 .widget-divider {
