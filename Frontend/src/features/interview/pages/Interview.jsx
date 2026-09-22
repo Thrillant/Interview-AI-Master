@@ -4,6 +4,7 @@ import { useInterview } from '../hooks/useInterview.js';
 import { useParams } from 'react-router';
 import { generateResumePdf } from '../services/interview.api.js';
 import Loader from '../../../Loader.jsx';
+import LogoutButton from '../../auth/components/LogoutButton.jsx';
 
 // --- Icons ---
 const TechIcon = () => (
@@ -366,6 +367,8 @@ const Interview = () => {
             <EyeIcon /> View Resume
           </button>
         </div>
+
+        <LogoutButton className="sidebar__logout" />
       </aside>
 
       {/* --- Main Content --- */}

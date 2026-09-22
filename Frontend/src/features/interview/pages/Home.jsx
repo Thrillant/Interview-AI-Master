@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import '../style/home.scss';
 import { useInterview } from '../hooks/useInterview.js';
+import LogoutButton from '../../auth/components/LogoutButton.jsx';
 
 // ─── Icons (inline SVGs to keep UI layer self-contained) ────────────────────
 
@@ -237,6 +238,10 @@ const Home = () => {
   return (
     <main className="home">
 
+      <nav className="home__topbar">
+        <LogoutButton />
+      </nav>
+
       {/* ── Hero ─────────────────────────────────────────────────────── */}
       <header className="home__hero">
         <h1 className="home__hero-title">
@@ -339,7 +344,6 @@ const Home = () => {
               <option value="gemini-3.5-flash">Gemini 3.5 Flash</option>
               <option value="gemini-3.1-flash-lite">Gemini 3.1 Flash-Lite</option>
               <option value="gemini-3-flash-preview">Gemini 3.0 Flash Preview</option>
-              <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
             </select>
           </div>
 

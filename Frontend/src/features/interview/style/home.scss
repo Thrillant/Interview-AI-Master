@@ -55,6 +55,15 @@ $font-sans:      'Inter', system-ui, -apple-system, sans-serif;
   padding: 3rem 1.5rem 2rem;
   gap: 2rem;
 
+  // ── Top bar ───────────────────────────────────────────────────────
+  &__topbar {
+    width: 100%;
+    max-width: 1060px;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: -1rem;
+  }
+
   // ── Hero ──────────────────────────────────────────────────────────
   &__hero {
     text-align: center;

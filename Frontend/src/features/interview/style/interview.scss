@@ -73,6 +73,10 @@ $font-sans:      'Inter', system-ui, -apple-system, sans-serif;
     flex-direction: column;
     gap: 0.5rem;
   }
+
+  &__logout {
+    width: 100%;
+  }
 }
 
 .nav-btn {
